@@ -34,9 +34,20 @@ def changeSpeed(speed):
 
 changeSpeed(50)
 
+def quit_fun(event):
+	tcpCliSock.send('stop')
+	tcpCliSock.close()
+	exit()
+
 @controller.event
 def on_button(button, pressed):
 	print 'button', button, pressed
+	if button == 14 and pressed == 1:
+		changeSpeed(100)
+	if button == 14 and pressed == 0:
+		changeSpeed(50)
+	if button == 5 and pressed == 1:
+		quit_fun(button)
 
 @controller.event
 def on_axis(axis, value):
@@ -59,7 +70,6 @@ def on_axis(axis, value):
 while True:
 	controller.dispatch_events()
 	time.sleep(.01)
-	print 'reverse', reverse
 	if(reverse and not isReversing):
 		tcpCliSock.send('backward')
 		isReversing = True
